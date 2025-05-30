@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
 import './ShoppingCart.css';
 
+// Simple Modal component
+const Modal = ({ children, onClose }) => (
+  <div className="modal-overlay">
+    <div className="modal-content">
+      {children}
+      <button className="modal-close" onClick={onClose}>Close</button>
+    </div>
+  </div>
+);
+
 const ShoppingCart = ({ cartItems, onRemoveFromCart, onUpdateQuantity, isVisible }) => {
   const [isOrderConfirmed, setIsOrderConfirmed] = useState(false);
 
