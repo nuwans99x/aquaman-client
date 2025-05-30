@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
+import './ShoppingCart.css';
 
-const ShoppingCart = ({ cartItems, onRemoveFromCart, onUpdateQuantity }) => {
+const ShoppingCart = ({ cartItems, onRemoveFromCart, onUpdateQuantity, isVisible }) => {
+  const [isOrderConfirmed, setIsOrderConfirmed] = useState(false);
+
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
+  const handleOrder = () => {
+    setIsOrderConfirmed(true);
+  };
+
   return (
-    <div className="shopping-cart">
+    <div className={`shopping-cart ${isVisible ? 'visible' : ''}`}>
       <h2>Your Cart</h2>
       {cartItems.length === 0 ? (
         <p>Your cart is empty.</p>
@@ -14,7 +21,7 @@ const ShoppingCart = ({ cartItems, onRemoveFromCart, onUpdateQuantity }) => {
         <ul>
           {cartItems.map((item) => (
             <li key={item.id} className="cart-item">
-              <img src={item.image} alt={item.name} />
+              <img src={item.imageUrl} alt={item.name} />
               <div>
                 <h3>{item.name}</h3>
                 <p>${item.price}</p>
@@ -30,6 +37,13 @@ const ShoppingCart = ({ cartItems, onRemoveFromCart, onUpdateQuantity }) => {
         </ul>
       )}
       <h3>Total: ${calculateTotal()}</h3>
+      <button onClick={handleOrder} className="order-button">Place Order</button>
+
+      {isOrderConfirmed && (
+        <Modal onClose={() => setIsOrderConfirmed(false)}>
+          <p>Your order has been confirmed!</p>
+        </Modal>
+      )}
     </div>
   );
 };
